@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interactive Form with jQuery Validation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- JS -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Registration Form</h1>
+
+    <form id="registerForm" novalidate>
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        <small class="error-msg" id="username-error"></small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email">
+        <small class="error-msg" id="email-error"></small>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password">
+        <small class="error-msg" id="password-error"></small>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword">
+        <small class="error-msg" id="confirmPassword-error"></small>
+      </div>
+
+      <!-- Interesting Topics -->
+      <div class="form-group">
+        <label>Interesting Topics</label>
+        <span class="inline-error" id="topics-error"></span>
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" name="topics" value="html"> HTML
+          </label>
+          <label>
+            <input type="checkbox" name="topics" value="css"> CSS
+          </label>
+          <label>
+            <input type="checkbox" name="topics" value="javascript"> JavaScript
+          </label>
+          <label>
+            <input type="checkbox" name="topics" value="jquery"> jQuery
+          </label>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <span class="inline-error" id="gender-error"></span>
+        <select id="gender" name="gender">
+          <option value="">—</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+  </div>
+</body>
+</html>
