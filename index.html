@@ -5,14 +5,106 @@
   <title>Interactive Form with jQuery Validation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="styles.css">
-
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-  <!-- JS -->
-  <script src="script.js" defer></script>
+  <!-- INLINE CSS (from styles.css) -->
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 20px 25px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: inline-block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      border-color: #007bff;
+    }
+
+    .checkbox-group {
+      margin-top: 8px;
+    }
+
+    .checkbox-group label {
+      display: block;
+      font-weight: normal;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      opacity: 0.9;
+    }
+
+    /* Error styles */
+    .input-error {
+      border-color: red !important;
+    }
+
+    .error-msg,
+    .inline-error {
+      display: block;
+      font-size: 12px;
+      color: red;
+      margin-top: 4px;
+    }
+
+    /* hide error text by default; JS will set the text only when needed */
+    .error-msg:empty,
+    .inline-error:empty {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -82,5 +174,111 @@
       <button type="submit" id="submitBtn">Submit</button>
     </form>
   </div>
+
+  <!-- INLINE JS (from script.js) -->
+  <script>
+    $(function () {
+      function setError($input, $errorElem, message) {
+        $input.addClass("input-error");
+        if ($errorElem) {
+          $errorElem.text(message);
+        }
+      }
+
+      function clearError($input, $errorElem) {
+        $input.removeClass("input-error");
+        if ($errorElem) {
+          $errorElem.text("");
+        }
+      }
+
+      // Clear error when typing/changing
+      $("#username, #email, #password, #confirmPassword").on("input", function () {
+        const id = $(this).attr("id") + "-error";
+        clearError($(this), $("#" + id));
+      });
+
+      $("input[name='topics']").on("change", function () {
+        $("#topics-error").text("");
+      });
+
+      $("#gender").on("change", function () {
+        $("#gender-error").text("");
+      });
+
+      $("#registerForm").on("submit", function (e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        const $username = $("#username");
+        const $email = $("#email");
+        const $password = $("#password");
+        const $confirmPassword = $("#confirmPassword");
+        const $topics = $("input[name='topics']");
+        const $gender = $("#gender");
+
+        // Clear previous errors
+        clearError($username, $("#username-error"));
+        clearError($email, $("#email-error"));
+        clearError($password, $("#password-error"));
+        clearError($confirmPassword, $("#confirmPassword-error"));
+        $("#topics-error").text("");
+        $("#gender-error").text("");
+
+        // 1. Empty field checks
+        if ($username.val().trim() === "") {
+          setError($username, $("#username-error"), "This field must not be empty");
+          isValid = false;
+        }
+        if ($email.val().trim() === "") {
+          setError($email, $("#email-error"), "This field must not be empty");
+          isValid = false;
+        }
+        if ($password.val().trim() === "") {
+          setError($password, $("#password-error"), "This field must not be empty");
+          isValid = false;
+        }
+        if ($confirmPassword.val().trim() === "") {
+          setError($confirmPassword, $("#confirmPassword-error"), "This field must not be empty");
+          isValid = false;
+        }
+
+        // 2. At least one topic
+        if ($("input[name='topics']:checked").length === 0) {
+          $("#topics-error").text("At least one topic must be selected");
+          isValid = false;
+        }
+
+        // 3. Gender not default
+        if ($gender.val() === "") {
+          $("#gender-error").text("Please choose your gender");
+          isValid = false;
+        }
+
+        // 4. Confirm password matches password (only check if both not empty)
+        if (
+          $password.val().trim() !== "" &&
+          $confirmPassword.val().trim() !== "" &&
+          $password.val() !== $confirmPassword.val()
+        ) {
+          setError(
+            $confirmPassword,
+            $("#confirmPassword-error"),
+            "Confirmed password mismatched the password"
+          );
+          isValid = false;
+        }
+
+        if (!isValid) {
+          return false;
+        }
+
+        // If everything OK, you can submit or just show a message
+        alert("Form submitted successfully!");
+        this.reset();
+      });
+    });
+  </script>
 </body>
 </html>
